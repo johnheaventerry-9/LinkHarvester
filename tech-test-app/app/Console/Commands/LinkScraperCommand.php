@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Http;
 class LinkScraperCommand extends Command
 {
     protected $signature = 'fetch:links';
-    protected $description = 'Fetch and process links from Pinboard';
 
     protected $url = 'https://pinboard.in/u:alasdairw?per_page=120';
 

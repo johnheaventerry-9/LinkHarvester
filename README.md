@@ -59,6 +59,7 @@ more flexible.
 
 - Improve styling on vue.js so it doesn't look like my first university project. Very barebones.
 
+- In hindsight i reckon i should of used a /api.php file instead of what i'd done there with the web.php. or used a controller to contain the php code, referenced from the API and then the logic moved into a service. I thought it was so little amount of code that this generally wouldn't be needed. But just saying!
 
 Final words
 

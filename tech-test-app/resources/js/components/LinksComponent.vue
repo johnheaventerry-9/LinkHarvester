@@ -3,15 +3,15 @@
       <h1>Link Harvester</h1>
       <h2>Filter Links by Tags</h2>
   
-      <div>
-        <label v-for="tag in tags" :key="tag">
+      <div class="filter-section">
+        <label v-for="tag in tags" :key="tag" class="tag-label">
           <input type="checkbox" :value="tag" v-model="highlightedTags" />
           {{ tag }}
         </label>
-        <button @click="getLinks">Show Links</button>
+        <button @click="getLinks" class="btn">Show Links</button>
       </div>
   
-      <div v-if="links.length">
+      <div v-if="links.length" class="links-section">
         <h3>Links:</h3>
         <ul>
           <li v-for="link in links" :key="link.id">
@@ -40,7 +40,9 @@
             params: { tags: this.highlightedTags.join(',') }
           });
           this.links = response.data;
-        } catch (error) {}
+        } catch (error) {
+          console.error('Error fetching links:', error);
+        }
       }
     }
   };
@@ -56,8 +58,34 @@
     text-align: center;
   }
   
-  button {
+  .filter-section {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .tag-label {
+    margin-right: 10px;
+  }
+  
+  .btn {
     margin-top: 10px;
+  }
+  
+  .links-section ul {
+    padding-left: 20px;
+  }
+  
+  .links-section ul li {
+    margin-bottom: 10px;
+  }
+  
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
   }
   </style>
   

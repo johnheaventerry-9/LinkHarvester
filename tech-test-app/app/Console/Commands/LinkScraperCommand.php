@@ -11,12 +11,13 @@ class LinkScraperCommand extends Command
     protected $signature = 'fetch:links';
     protected $description = 'Fetch and process links from Pinboard';
 
+    protected $url = 'https://pinboard.in/u:alasdairw?per_page=120';
+
     public function handle()
     {
-        $url = 'https://pinboard.in/u:alasdairw?per_page=120';
-        $this->info('Fetching links from: ' . $url);
+        $this->info('Fetching links from: ' . $this->url);
 
-        $response = Http::withOptions(['verify' => false])->get($url);
+        $response = Http::withOptions(['verify' => false])->get($this->url);
 
         if ($response->successful()) {
             $this->info('Successfully fetched the page.');
@@ -46,7 +47,7 @@ class LinkScraperCommand extends Command
     /**
      * Parses the HTML content and retrieves bookmark nodes (links).
      *
-     * @param string $html The raw HTML content.
+     * @param string $html The HTML content.
      * @return \DOMNodeList The list of nodes matching the bookmark links.
      */
     private function parseHtmlForBookmarks($html)
@@ -84,20 +85,20 @@ class LinkScraperCommand extends Command
      */
     private function extractTagsFromNode($node)
     {
-        $tagsToCheck = ['laravel', 'vue', 'vue.js', 'php', 'api'];
+        $staticTags = ['laravel', 'vue', 'vue.js', 'php', 'api'];
         $parent = $node->parentNode;
-        $possibleTagNode = $parent->textContent;
+        $textContent = $parent->textContent;
 
         // Clean and process the text for tag extraction
-        $cleanedText = preg_replace('/\s+/', ' ', str_replace("\u{A0}", ' ', $possibleTagNode));
+        $cleanedText = preg_replace('/\s+/', ' ', str_replace("\u{A0}", ' ', $textContent));
         $cleanedText = preg_replace('/copy to mine|[a-zA-Z]+\s+\d{4}/', '', $cleanedText);
         $cleanedText = strtolower($cleanedText);
 
         $splitText = explode(' ', trim($cleanedText));
 
         // Filter and return the tags that match the predefined list
-        return array_values(array_filter($splitText, function ($text) use ($tagsToCheck) {
-            return in_array($text, $tagsToCheck, true);
+        return array_values(array_filter($splitText, function ($text) use ($staticTags) {
+            return in_array($text, $staticTags, true);
         }));
     }
 
